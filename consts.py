@@ -1,0 +1,4 @@
+PLAYER_1 = True
+PLAYER_2 = False
+MAX = 1000
+MIN = -1000
