@@ -48,6 +48,10 @@ class TicTacToeGUI:
                 self.show_result(result)
             self.game.current_player = not self.game.current_player
             self.update_buttons()
+        self.make_ai_move()
+
+    def make_ai_move(self):
+        self.game.ai_move()
 
     def update_buttons(self):
         valid_moves = self.game.available_moves()

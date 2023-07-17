@@ -46,42 +46,6 @@ class Board():
 		return moves
 
 
-	def index_to_cell(self,index)->str:
-		cell = ''
-		if index%3==0: cell = 'a'
-		if index%3==1: cell = 'b'
-		if index%3==2: cell = 'c'
-		
-		if index<3: cell += '3'
-		elif index<6: cell += '2'
-		else: cell += '1'
-		return cell
-
-
-	def cell_to_index(self,cell)->int:
-		col,row = cell[0],cell[1]
-		index = 0
-		if col == 'a': index += 0
-		if col == 'b': index += 1
-		if col == 'c': index += 2
-		
-		if row == '3': index += 0
-		if row == '2': index += 3
-		if row == '1': index += 6
-		return index
-	
-	
-	def choose_move(self,forced_player=None,forced_last_move=None)->int:
-		'''apply a move on the board and returns it'''
-		player = forced_player if forced_player else self.current_player
-		last_move = forced_last_move if forced_last_move else self.last_move
-		moves = self.available_moves(player,last_move)
-		for move in moves:
-			print(f'[{self.index_to_cell(move)}]',end='  ')
-		print()
-		player_choice = self.cell_to_index(input('choose move: '))
-		self.apply_move(player_choice)
-		return player_choice
 
 
 	def apply_move(self,cell,forced_player=None)->bool:
@@ -98,7 +62,9 @@ class Board():
 		return True
 
 
-	def ia_move(self,player,last_move)->int:
+	def ai_move(self,forced_player=None,forced_last_move=None)->int:
+		player = forced_player if forced_player else self.current_player
+		last_move = forced_last_move if forced_last_move else self.last_move
 		best_score = MIN
 		best_move = -1
 		moves = self.available_moves(player,last_move)
@@ -156,25 +122,3 @@ class Board():
 				best = min(best,self.minmax(depth+1,not isMax,not player,move))
 				self.revert_move(move,player)
 			return best
-
-
-	def random_move(self,player,last_move)->int:
-		cell = choice(self.available_moves(player,last_move))
-		self.apply_move(cell)
-		return cell
-
-
-	def __repr__(self):
-		rep_str = '\n      |   |   \n'
-		rep_str += f' 3  {self._value_to_char(self.board[0])} | {self._value_to_char(self.board[1])} | {self._value_to_char(self.board[2])} \n'
-		rep_str += '      |   |   \n'
-		rep_str += '   ---+---+---\n'
-		rep_str += '      |   |   \n'
-		rep_str += f' 2  {self._value_to_char(self.board[3])} | {self._value_to_char(self.board[4])} | {self._value_to_char(self.board[5])} \n'
-		rep_str += '      |   |   \n'
-		rep_str += '   ---+---+---\n'
-		rep_str += '      |   |   \n'
-		rep_str += f' 1  {self._value_to_char(self.board[6])} | {self._value_to_char(self.board[7])} | {self._value_to_char(self.board[8])} \n'
-		rep_str += '      |   |   \n'
-		rep_str += '    a   b   c \n'
-		return rep_str
